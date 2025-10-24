@@ -1,0 +1,116 @@
+/* Універсальна коробкова модель */
+* {
+  box-sizing: border-box;
+}
+
+/* Адаптивні зображення */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Змінні кольорів і відступів */
+:root {
+  --color-primary: #3366ff;
+  --color-secondary: #e0e0e0;
+  --color-text: #333333;
+  --color-bg: #ffffff;
+  --spacing: 1rem;
+}
+
+/* Базова типографіка */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* Видимий фокус */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Шапка */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing);
+  background: var(--color-secondary);
+}
+
+.menu a {
+  margin-left: var(--spacing);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.menu a:hover,
+.menu a:focus {
+  color: var(--color-primary);
+}
+
+/* Контентна область */
+.content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing);
+}
+
+/* Картка */
+.card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-secondary);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: var(--spacing);
+  margin-bottom: var(--spacing);
+}
+
+/* Кнопки */
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: var(--color-secondary);
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn:hover,
+.btn:focus {
+  opacity: 0.9;
+}
+
+/* @media breakpoint */
+@media (min-width: 768px) {
+  .content {
+    padding: calc(var(--spacing) * 2);
+  }
+
+  .card-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing);
+  }
+
+  .menu {
+    justify-content: flex-end;
+  }
+}

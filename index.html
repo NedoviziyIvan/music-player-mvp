@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="uk">
-     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-widht, initial-scale=0.1">
-    <title>Мій сайт</title>
-    <link rel="stylesheet" href="style.css">
-    
-    </head>
-    <body>
-        <header class="header">
-            <img scr="logo.png" alt="logo for my site">
-        </header>
-        <h1>Привіт, світ!</h1>
-       
-    </body>
-    
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Музикальний плеєр</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Музика</div>
+    <nav class="menu">
+      <a href="#">Головна</a>
+      <a href="#">Треки</a>
+      <a href="#">Контакти</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <ul class="card-list">
+      <li class="card">
+        <img src="cover.jpg" alt="Обкладинка">
+        <h2>Назва треку</h2>
+        <p>Виконавець</p>
+        <button class="btn">Додати</button>
+        <button class="btn btn-primary">Прослухати</button>
+      </li>
+    </ul>
+  </main>
+</body>
 </html>
