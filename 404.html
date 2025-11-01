@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музикальний плеєр</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script>
+        // Перенаправляем на главную страницу для SPA маршрутизации
+        sessionStorage.redirect = location.pathname;
+        location.replace('/' + location.pathname.split('/')[1]);
+    </script>
+    <noscript>
+        <p>Сторінку не знайдено. <a href="index.html">Перейти на головну</a></p>
+    </noscript>
+</body>
+</html>

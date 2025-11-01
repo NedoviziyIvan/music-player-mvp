@@ -17,30 +17,51 @@
   </header>
 
   <main class="content">
-    <h1>Додати новий трек</h1>
-    <form class="track-form">
-      <label>Назва треку
-        <input type="text" placeholder="Введіть назву" required>
-      </label>
-
-      <label>Виконавець
-        <input type="text" placeholder="Ім’я виконавця" required>
-      </label>
-
-      <label>Файл треку
-        <input type="file" accept="audio/*" required>
-      </label>
-
-      <label>Обкладинка
-        <input type="file" accept="image/*">
-      </label>
-
-      <label>Опис
-        <textarea placeholder="Короткий опис треку"></textarea>
-      </label>
-
-      <button class="btn btn-primary" type="submit">Зберегти</button>
-    </form>
+    <div class="add-track-info">
+      <h1>Додати новий трек</h1>
+      <p>Щоб додати трек, потрібно натиснути на кнопку нижче</p>
+      <button class="btn btn-primary" id="openModalBtn">Додати трек</button>
+    </div>
   </main>
+
+  <!-- Модальное окно -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2>Додати новий трек</h2>
+      <form class="modal-form" id="trackForm">
+        <label>
+          Назва треку
+          <input type="text" id="trackName" placeholder="Введіть назву треку" required>
+        </label>
+        <label>
+          Виконавець
+          <input type="text" id="trackArtist" placeholder="Ім'я виконавця" required>
+        </label>
+        <label>
+          Жанр
+          <input type="text" id="trackGenre" placeholder="Жанр треку">
+        </label>
+        <label>
+          Опис
+          <textarea id="trackDescription" placeholder="Короткий опис треку"></textarea>
+        </label>
+        <label>
+          Файл треку
+          <input type="file" id="trackFile" accept="audio/*" required>
+        </label>
+        <label>
+          Обкладинка
+          <input type="file" id="trackCover" accept="image/*">
+        </label>
+        <small class="error-message" id="errorMessage"></small>
+        <div class="modal-buttons">
+          <button type="button" class="btn" id="cancelBtn">Скасувати</button>
+          <button type="submit" class="btn btn-primary">Зберегти</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="add-script.js"></script>
 </body>
 </html>

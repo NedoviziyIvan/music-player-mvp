@@ -18,35 +18,21 @@
   </header>
 
   <main class="content">
-    <ul class="card-list">
-      <li class="card">
-        <img src="cover.jpg" alt="Обкладинка треку">
-        <div class="card-info">
-          <h2>Назва треку</h2>
-          <p>Виконавець</p>
-          <div class="card-buttons">
-            <button class="btn">Додати</button>
-            <button class="btn btn-primary">Прослухати</button>
-          </div>
-        </div>
-      </li>
-
-      <li class="card">
-        <img src="cover2.jpg" alt="Обкладинка треку">
-        <div class="card-info">
-          <h2>Інший трек</h2>
-          <p>Інший виконавець</p>
-          <div class="card-buttons">
-            <button class="btn">Додати</button>
-            <button class="btn btn-primary">Прослухати</button>
-          </div>
-        </div>
-      </li>
+    <ul class="card-list" id="tracksList">
+      <!-- Треки будут добавляться динамически через JavaScript -->
     </ul>
   </main>
+  <!-- Добавьте этот div после ul с карточками -->
+<div style="text-align: center; margin-top: 2rem; grid-column: 1 / -1;">
+    <button class="btn" onclick="clearAllTracks()" style="background: #ff4444; color: white;">
+        🗑️ Видалити всі треки
+    </button>
+</div>
 
   <footer class="footer">
     <p>© 2025 Музикальний плеєр</p>
   </footer>
+
+  <script src="index-script.js"></script>
 </body>
 </html>
