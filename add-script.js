@@ -7,25 +7,55 @@ const errorMessage = document.getElementById('errorMessage');
 
 // Настройки размера файлов
 const FILE_SIZE_LIMITS = {
-    audio: 10, // MB для аудио файлов (уменьшил для надежности)
-    image: 1   // MB для изображений
+    audio: 10,
+    image: 1
 };
 
-// Инициализация IndexedDB
+// Версия базы данных - УВЕЛИЧИВАЕМ для принудительного обновления
+const DB_VERSION = 3;
+const DB_NAME = 'MusicPlayerDB';
+
+// Инициализация IndexedDB с миграцией
 function initDB() {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open('MusicPlayerDB', 2); // Увеличиваем версию
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
         
-        request.onerror = () => reject('Помилка відкриття бази даних');
+        request.onerror = (event) => {
+            console.error('IndexedDB error:', event.target.error);
+            reject('Помилка відкриття бази даних: ' + event.target.error);
+        };
+        
         request.onsuccess = (event) => {
+            console.log('IndexedDB успешно открыта версия:', event.target.result.version);
             resolve(event.target.result);
         };
         
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
+            const oldVersion = event.oldVersion;
+            const newVersion = event.newVersion;
+            
+            console.log(`Миграция базы с версии ${oldVersion} на ${newVersion}`);
+            
+            // Создаем хранилище если его нет
             if (!db.objectStoreNames.contains('tracks')) {
+                console.log('Создаем хранилище tracks');
                 const store = db.createObjectStore('tracks', { keyPath: 'id' });
                 store.createIndex('name', 'name', { unique: false });
+            } else {
+                console.log('Хранилище tracks уже существует');
+            }
+            
+            // Миграция с версии 1 на 2
+            if (oldVersion < 2) {
+                console.log('Миграция на версию 2');
+                // Можно добавить миграцию данных если нужно
+            }
+            
+            // Миграция с версии 2 на 3
+            if (oldVersion < 3) {
+                console.log('Миграция на версию 3');
+                // Можно добавить миграцию данных если нужно
             }
         };
     });
@@ -76,16 +106,33 @@ function fileToBase64(file, options = {}) {
 async function saveTrack(trackData) {
     const db = await initDB();
     return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['tracks'], 'readwrite');
-        const store = transaction.objectStore('tracks');
-        
-        trackData.id = Date.now().toString();
-        trackData.addedAt = new Date().toISOString();
-        
-        const request = store.add(trackData);
-        
-        request.onsuccess = () => resolve(trackData.id);
-        request.onerror = () => reject('Помилка збереження треку');
+        try {
+            const transaction = db.transaction(['tracks'], 'readwrite');
+            const store = transaction.objectStore('tracks');
+            
+            trackData.id = Date.now().toString();
+            trackData.addedAt = new Date().toISOString();
+            
+            const request = store.add(trackData);
+            
+            request.onsuccess = () => {
+                console.log('Трек успешно сохранен с ID:', trackData.id);
+                resolve(trackData.id);
+            };
+            request.onerror = (event) => {
+                console.error('Ошибка сохранения трека:', event.target.error);
+                reject('Помилка збереження треку: ' + event.target.error);
+            };
+            
+            transaction.onerror = (event) => {
+                console.error('Ошибка транзакции:', event.target.error);
+                reject('Помилка транзакції: ' + event.target.error);
+            };
+            
+        } catch (error) {
+            console.error('Ошибка в saveTrack:', error);
+            reject('Помилка збереження: ' + error.message);
+        }
     });
 }
 
@@ -109,6 +156,9 @@ async function handleFormSubmit(e) {
     errorMessage.style.color = '#3366ff';
 
     try {
+        // Предварительная инициализация базы
+        await initDB();
+        
         // Конвертируем аудио файл в Base64
         const audioBase64 = await fileToBase64(trackFile, {
             maxSizeMB: FILE_SIZE_LIMITS.audio,
@@ -177,8 +227,9 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         await initDB();
-        console.log('IndexedDB ініціалізовано');
+        console.log('IndexedDB успешно инициализирована');
     } catch (error) {
         console.error('Помилка ініціалізації IndexedDB:', error);
+        errorMessage.textContent = 'Помилка ініціалізації бази даних. Оновіть сторінку.';
     }
 });

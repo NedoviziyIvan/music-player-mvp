@@ -1,3 +1,31 @@
+// Версия базы данных - ДОЛЖНА СОВПАДАТЬ
+const DB_VERSION = 3;
+const DB_NAME = 'MusicPlayerDB';
+
+// Инициализация IndexedDB
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        
+        request.onerror = (event) => {
+            console.error('IndexedDB error:', event.target.error);
+            reject('Помилка відкриття бази даних: ' + event.target.error);
+        };
+        
+        request.onsuccess = (event) => {
+            resolve(event.target.result);
+        };
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains('tracks')) {
+                const store = db.createObjectStore('tracks', { keyPath: 'id' });
+                store.createIndex('name', 'name', { unique: false });
+            }
+        };
+    });
+}
+
 // Загрузка деталей трека
 async function loadTrackDetails() {
     const trackDetails = document.getElementById('trackDetails');
@@ -11,6 +39,8 @@ async function loadTrackDetails() {
     }
     
     try {
+        // Инициализируем базу перед загрузкой
+        await initDB();
         const track = await getTrackById(trackId);
         
         if (!track) {
@@ -45,15 +75,6 @@ async function loadTrackDetails() {
             </div>
         `;
         
-        // Добавляем обработчик ошибок для аудио
-        const audioElement = trackDetails.querySelector('audio');
-        if (audioElement) {
-            audioElement.addEventListener('error', function(e) {
-                console.error('Помилка завантаження аудіо:', e);
-                alert('Помилка завантаження аудіо файлу. Спробуйте додати трек знову.');
-            });
-        }
-        
     } catch (error) {
         console.error('Помилка завантаження треку:', error);
         trackDetails.innerHTML = '<p>Помилка завантаження треку. <a href="index.html">Повернутися до списку</a></p>';
@@ -63,22 +84,23 @@ async function loadTrackDetails() {
 // Функция получения трека по ID
 function getTrackById(trackId) {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open('MusicPlayerDB', 2);
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
         
         request.onsuccess = (event) => {
             const db = event.target.result;
-            const transaction = db.transaction(['tracks'], 'readonly');
-            const store = transaction.objectStore('tracks');
-            const getRequest = store.get(trackId);
-            
-            getRequest.onsuccess = () => {
-                console.log('Знайдено трек:', getRequest.result);
-                resolve(getRequest.result);
-            };
-            getRequest.onerror = () => reject('Помилка завантаження треку');
+            try {
+                const transaction = db.transaction(['tracks'], 'readonly');
+                const store = transaction.objectStore('tracks');
+                const getRequest = store.get(trackId);
+                
+                getRequest.onsuccess = () => resolve(getRequest.result);
+                getRequest.onerror = (event) => reject('Помилка завантаження треку: ' + event.target.error);
+            } catch (error) {
+                reject('Помилка транзакції: ' + error);
+            }
         };
         
-        request.onerror = () => reject('Помилка відкриття бази даних');
+        request.onerror = (event) => reject('Помилка відкриття бази даних: ' + event.target.error);
     });
 }
 
@@ -89,26 +111,30 @@ async function deleteTrack(trackId) {
     }
     
     try {
-        const request = indexedDB.open('MusicPlayerDB', 2);
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
         
         request.onsuccess = (event) => {
             const db = event.target.result;
-            const transaction = db.transaction(['tracks'], 'readwrite');
-            const store = transaction.objectStore('tracks');
-            const deleteRequest = store.delete(trackId);
-            
-            deleteRequest.onsuccess = () => {
-                alert('Трек успішно видалено!');
-                window.location.href = 'index.html';
-            };
-            
-            deleteRequest.onerror = () => {
-                alert('Помилка видалення треку');
-            };
+            try {
+                const transaction = db.transaction(['tracks'], 'readwrite');
+                const store = transaction.objectStore('tracks');
+                const deleteRequest = store.delete(trackId);
+                
+                deleteRequest.onsuccess = () => {
+                    alert('Трек успішно видалено!');
+                    window.location.href = 'index.html';
+                };
+                
+                deleteRequest.onerror = (event) => {
+                    alert('Помилка видалення треку: ' + event.target.error);
+                };
+            } catch (error) {
+                alert('Помилка транзакції: ' + error);
+            }
         };
     } catch (error) {
         console.error('Помилка видалення:', error);
-        alert('Помилка видалення треку');
+        alert('Помилка видалення треку: ' + error);
     }
 }
 
