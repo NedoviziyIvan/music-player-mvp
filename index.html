@@ -10,8 +10,9 @@
   <header class="header">
     <div class="logo">Музика</div>
     <nav class="menu">
-      <a href="#">Головна</a>
-      <a href="#">Треки</a>
+      <a href="index.html">Головна</a>
+      <a href="track.html">Треки</a>
+      <a href="add.html">Додати трек</a>
       <a href="#">Контакти</a>
     </nav>
   </header>
@@ -19,13 +20,33 @@
   <main class="content">
     <ul class="card-list">
       <li class="card">
-        <img src="cover.jpg" alt="Обкладинка">
-        <h2>Назва треку</h2>
-        <p>Виконавець</p>
-        <button class="btn">Додати</button>
-        <button class="btn btn-primary">Прослухати</button>
+        <img src="cover.jpg" alt="Обкладинка треку">
+        <div class="card-info">
+          <h2>Назва треку</h2>
+          <p>Виконавець</p>
+          <div class="card-buttons">
+            <button class="btn">Додати</button>
+            <button class="btn btn-primary">Прослухати</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="card">
+        <img src="cover2.jpg" alt="Обкладинка треку">
+        <div class="card-info">
+          <h2>Інший трек</h2>
+          <p>Інший виконавець</p>
+          <div class="card-buttons">
+            <button class="btn">Додати</button>
+            <button class="btn btn-primary">Прослухати</button>
+          </div>
+        </div>
       </li>
     </ul>
   </main>
+
+  <footer class="footer">
+    <p>© 2025 Музикальний плеєр</p>
+  </footer>
 </body>
 </html>

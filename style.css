@@ -1,5 +1,5 @@
 /* Універсальна коробкова модель */
-* {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -9,26 +9,28 @@ img {
   height: auto;
 }
 
-/* Змінні кольорів і відступів */
+/* Змінні */
 :root {
   --color-primary: #3366ff;
   --color-secondary: #e0e0e0;
-  --color-text: #333333;
   --color-bg: #ffffff;
+  --color-text: #333333;
   --spacing: 1rem;
+  --radius: 0.5rem;
 }
 
 /* Базова типографіка */
 html {
   font-size: 16px;
 }
-
 body {
   font-family: Arial, sans-serif;
   color: var(--color-text);
   background: var(--color-bg);
   margin: 0;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Видимий фокус */
@@ -45,38 +47,50 @@ body {
   padding: var(--spacing);
   background: var(--color-secondary);
 }
-
 .menu a {
   margin-left: var(--spacing);
   text-decoration: none;
   color: var(--color-text);
 }
-
-.menu a:hover,
-.menu a:focus {
+.menu a:hover, .menu a:focus, .menu a.active {
   color: var(--color-primary);
 }
 
-/* Контентна область */
+/* Контент */
 .content {
+  flex: 1;
   max-width: 600px;
   margin: 0 auto;
   padding: var(--spacing);
 }
+.footer {
+  background: var(--color-secondary);
+  text-align: center;
+  padding: var(--spacing);
+}
 
-/* Картка */
+/* Картки */
 .card-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  gap: var(--spacing);
 }
-
 .card {
+  display: flex;
+  flex-direction: column;
   background: var(--color-bg);
   border: 1px solid var(--color-secondary);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.card-info {
   padding: var(--spacing);
-  margin-bottom: var(--spacing);
+}
+.card-buttons {
+  margin-top: var(--spacing);
 }
 
 /* Кнопки */
@@ -86,31 +100,76 @@ body {
   background: var(--color-secondary);
   cursor: pointer;
   margin-right: 0.5rem;
+  border-radius: var(--radius);
 }
-
 .btn-primary {
   background: var(--color-primary);
   color: #fff;
 }
-
-.btn:hover,
-.btn:focus {
+.btn:hover, .btn:focus {
   opacity: 0.9;
 }
 
-/* @media breakpoint */
+/* Детальна сторінка */
+.track-details {
+  display: grid;
+  gap: var(--spacing);
+}
+.track-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Форма */
+.track-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+}
+.track-form input, .track-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--radius);
+}
+
+/* Адаптивність */
 @media (min-width: 768px) {
   .content {
-    padding: calc(var(--spacing) * 2);
+    max-width: 900px;
+    padding: 2rem;
   }
-
   .card-list {
-    display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+  .track-form {
+    grid-template-columns: 1fr 1fr;
+    display: grid;
     gap: var(--spacing);
   }
+  .track-form button {
+    grid-column: span 2;
+    justify-self: end;
+  }
+}
 
-  .menu {
-    justify-content: flex-end;
+@media (min-width: 1024px) {
+  .content {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: var(--spacing);
+  }
+  .track-details {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
   }
 }

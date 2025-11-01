@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Додати трек</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Музика</div>
+    <nav class="menu">
+      <a href="index.html">Головна</a>
+      <a href="track.html">Треки</a>
+      <a href="add.html" class="active">Додати трек</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Додати новий трек</h1>
+    <form class="track-form">
+      <label>Назва треку
+        <input type="text" placeholder="Введіть назву" required>
+      </label>
+
+      <label>Виконавець
+        <input type="text" placeholder="Ім’я виконавця" required>
+      </label>
+
+      <label>Файл треку
+        <input type="file" accept="audio/*" required>
+      </label>
+
+      <label>Обкладинка
+        <input type="file" accept="image/*">
+      </label>
+
+      <label>Опис
+        <textarea placeholder="Короткий опис треку"></textarea>
+      </label>
+
+      <button class="btn btn-primary" type="submit">Зберегти</button>
+    </form>
+  </main>
+</body>
+</html>
